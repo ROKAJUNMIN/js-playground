@@ -1,25 +1,19 @@
 // 입국심사
 function solution(n, times) {
-    times.sort((a,b) => a - b);
+    const sortedTimes = times.sort((a,b) => a - b);
     let left = 1;
-    let right = times[times.length - 1] * n;
-    let answer = right;
+    let right = sortedTimes[sortedTimes.length - 1] * n;
 
     while (left <= right) {
-        let mid = Math.floor((right + left) / 2);
-        let count = 0;
-        times.forEach((value) => {
-            count += Math.floor(mid / value);
-            if (count >= n) {
-                answer = Math.min(mid, answer);
-                return;
-            }
-        });
-        if (count >= n) {
-            right = mid - 1;
-        } else {
+        const mid = Math.floor((left + right) / 2);
+        // 시간 / 심사시간 = 입국자 수
+        const sum = times.reduce((acc, time) => acc + Math.floor(mid / time), 0);
+
+        if (sum < n) {
             left = mid + 1;
+        } else {
+            right = mid - 1;
         }
     }
-    return answer;
+    return left;
 }
